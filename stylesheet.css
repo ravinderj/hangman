@@ -1,0 +1,12 @@
+#keyboard {
+  margin-left: 250px;
+  margin-top: 220px;
+}
+
+button {
+  height: 50px;
+  width: 50px;
+  background-color: lightsteelblue;
+  font-size: 25px;
+  border: 2px solid black;
+}
