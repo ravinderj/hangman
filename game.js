@@ -79,7 +79,7 @@ const startGame = function(game){
 
 
 const loadGame = function(){
-  let startButton = document.getElementById("start button");
+  let startButton = document.getElementById("start-button");
   let word = getRandomWord();
   let game = new Game(word,6);
   startButton.onclick = ()=>{startGame(game)};
