@@ -2,28 +2,60 @@ const list = [
   "france","italy","india","singapore","australia","poland","iran","iraq","afghanistan","myanmar","brazil","chile","mongolia"
 ];
 
-const Game = function(word,noOfChances){
-  this.word = word.toUpperCase();
-  this.keysPressed = [];
-  this.player = new Player(noOfChances);
-  this.status = new Array(this.word.length).fill("-");
-};
 
-Game.prototype.updateStatus = function(key){
-  if(!this.word.includes(key)){
-    this.player.wrongLetters.push(key);
-    this.player.noOfChances--;
-  }else{
-  let indices = getIndicesOfSameLetter(this.word,key);
-  let gameStatus = updateDashList(indices,this.status,key);
-  this.status = gameStatus;
+class Game {
+  constructor(word,noOfChances){
+    this._word = word.toUpperCase();
+    this._keysPressed = [];
+    this._player = new Player(noOfChances);
+    this._status = new Array(this._word.length).fill("-");
+  };
+
+  get status(){
+    return this._status;
   }
-};
 
-const Player = function(noOfChances){
-  this.wrongLetters = [];
-  this.noOfChances = noOfChances;
-};
+  alreadyPressed(key){
+    return this._keysPressed.includes(key);
+  }
+
+  update(key){
+    this._keysPressed.push(key);
+
+    let isCorrect = this._word.includes(key);
+    this._player.updateStatus(isCorrect,key);
+
+    this.updateStatus(key);
+  };
+
+  updateStatus(key){
+    let indices = getIndicesOfSameLetter(this._word,key);
+    let gameStatus = updateDashList(indices,this._status,key);
+    this._status = gameStatus;
+  }
+
+  playerChances(){
+    return this._player.noOfChances;
+  }
+}
+
+class Player {
+  constructor(noOfChances){
+    this._wrongKeysPressed = [];
+    this._noOfChances = noOfChances;
+  };
+
+  get noOfChances(){
+    return this._noOfChances;
+  }
+
+  updateStatus(isCorrect,key){
+    if (!isCorrect){
+      this._noOfChances--;
+      this._wrongKeysPressed.push(key);
+    }
+  }
+}
 
 const getRandomWord = function() {
   let index = Math.floor(Math.random()*list.length);
@@ -41,10 +73,8 @@ const getIndicesOfSameLetter = function(word,key){
 }
 
 const updateDashList = function(indices,dashList,letter){
-  for (var index = 0; index < dashList.length; index++) {
-    if(indices.includes(index)){
-      dashList[index]=letter;
-    }
+  for (let index = 0; index < indices.length; index++) {
+    dashList[indices[index]] = letter;
   }
   return dashList;
 };
@@ -52,10 +82,9 @@ const updateDashList = function(indices,dashList,letter){
 const updateGame = function(event,game){
   let key = event.target.id;
   console.log(key);
-  if(!game.keysPressed.includes(key)){
-    game.updateStatus(key);
+  if(!game.alreadyPressed(key)){
+    game.update(key);
   }
-  game.keysPressed.push(key);
 };
 
 ////////////////////////////////////
@@ -64,7 +93,7 @@ const updateDisplay = function(game){
   let dashes = document.getElementById("dashes");
   let chances = document.getElementById("chances");
   dashes.innerText = game.status.join("");
-  chances.innerText = game.player.noOfChances;
+  chances.innerText = game.playerChances();
 };
 
 const startGame = function(game){
@@ -82,7 +111,8 @@ const loadGame = function(){
   let startButton = document.getElementById("start-button");
   let word = getRandomWord();
   let game = new Game(word,6);
-  startButton.onclick = ()=>{startGame(game)};
+  startButton.onclick = () => {loadGame()}
+  startGame(game)
 };
 
 window.onload = loadGame;
