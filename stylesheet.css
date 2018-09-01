@@ -1,14 +1,28 @@
-#keyboard {
-  margin-left: 420px;
-  margin-top: 200px;
-}
-
 button {
   height: 20px;
   width: 40px;
 }
 
+button[id='start-button'] {
+  height: 40px; 
+  width: 120px;
+}
+
+#keyboard {
+  margin-left: 420px;
+  margin-top: 150px;
+}
+
 #menu {
   padding-top: 40px;
   text-align: center;
+}
+
+#status {
+  text-align: center;
+  font-size: x-large;
+}
+
+#dashes {
+  font-size: x-large;
 }
