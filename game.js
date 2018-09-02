@@ -1,7 +1,3 @@
-const list = [
-  "france","italy","india","singapore","australia","poland","iran","iraq","afghanistan","myanmar","brazil","chile","mongolia"
-];
-
 const PLAY = '';
 const WON = 'You won!';
 const LOST = 'You lost!';
@@ -45,7 +41,10 @@ class Game {
     if (this._player.noOfChances == 0){
       this._playerStatus = LOST;
     }
-    let hasPlayerWon = this._word.split('').every((char)=>this._keysPressed.includes(char))
+    let hasPlayerWon = this._word.
+      replace(/\s/g,'').
+      split('').
+      every((char)=>this._keysPressed.includes(char))
     if (hasPlayerWon){
       this._playerStatus = WON;
     }
@@ -77,8 +76,8 @@ class Player {
 }
 
 const getRandomWord = function() {
-  let index = Math.floor(Math.random()*list.length);
-  return list[index];
+  let index = Math.floor(Math.random()*countries.length);
+  return countries[index];
 };
 
 const getIndicesOf = function(char,word){
